@@ -1,148 +1,122 @@
-# example_ros1_package
 
-A beginner-friendly **ROS1** package demonstrating:
+# Example ROS1 Package
 
-- Publishing and subscribing to topics
-- Calling and serving services (`AddTwoInts`)
-- Implementations in **C++**, **Python**
-- A simple **web interface** using `roslibjs` to interact with ROS
+This is an example ROS1 package demonstrating various features, including ROS nodes in C++ and Python, message generation, services, tests, and more.
 
+## Features
 
-```
-rosdep install --from-paths src --ignore-src -r -y
-sudo apt-get update
-sudo apt-get install libgtest-dev cmake
+- Publisher and Subscriber ROS Nodes in C++ and Python
+- Service Server and Client in C++ and Python
+- Google Test Integration for unit testing
+- Basic setup to generate and test messages
+- Examples of using `rostest` for testing ROS nodes
 
-```
-
----
-
-## 📦 Package Structure
+## File Structure
 
 ```
 example_ros1_package/
+│
 ├── CMakeLists.txt
 ├── package.xml
-├── srv/
-│   └── AddTwoInts.srv
-├── src/
-│   ├── publisher.cpp
-│   ├── subscriber.cpp
-│   ├── service_server.cpp
-│   └── service_client.cpp
-├── scripts/
-│   ├── publisher.py
-│   ├── subscriber.py
-│   ├── service_server.py
-│   └── service_client.py
-├── web/
-│   └── ros_web_example.html
-└── launch/
-    └── demo.launch
+└── src/
+    ├── publisher.cpp        # C++ Publisher Node
+    ├── subscriber.cpp       # C++ Subscriber Node
+    ├── service_server.cpp   # C++ Service Server Node
+    ├── service_client.cpp   # C++ Service Client Node
+    ├── test_example.cpp     # C++ Google Test Example
+    └── publisher.py         # Python Publisher Node
+    └── subscriber.py        # Python Subscriber Node
+    └── service_server.py    # Python Service Server
+    └── service_client.py    # Python Service Client
 ```
 
----
+## Prerequisites
 
-## ✅ Build Instructions
+Before building the package, make sure the following packages are installed:
+
+- ROS Noetic
+- CMake 2.8.12 or higher
+- GTest for unit testing
+
+### Install Dependencies
 
 ```bash
-cd ~/catkin_ws/src
-git clone https://github.com/chrissunny94/example_ros1_package.git
+sudo apt-get install ros-noetic-roscpp ros-noetic-rospy ros-noetic-std-msgs ros-noetic-message-generation ros-noetic-rostest
+```
+
+## Building the Package
+
+1. Create and build the workspace:
+
+```bash
 cd ~/catkin_ws
 catkin_make
+```
+
+2. Source the workspace setup file:
+
+```bash
 source devel/setup.bash
 ```
 
----
+## Running the Nodes
 
-## 🚀 Usage
+### C++ Publisher and Subscriber
 
-### Topic Publisher / Subscriber
+To run the C++ publisher and subscriber nodes:
 
-#### C++:
+1. Launch the Publisher:
+
 ```bash
 rosrun example_ros1_package talker
+```
+
+2. Launch the Subscriber:
+
+```bash
 rosrun example_ros1_package listener
 ```
 
-#### Python:
-```bash
-rosrun example_ros1_package publisher.py
-rosrun example_ros1_package subscriber.py
-```
+### C++ Service Server and Client
 
----
+1. Launch the Service Server:
 
-### Service Server / Client
-
-#### C++:
 ```bash
 rosrun example_ros1_package add_two_ints_server
+```
+
+2. Launch the Service Client:
+
+```bash
 rosrun example_ros1_package add_two_ints_client
 ```
 
-#### Python:
+### Python Publisher and Subscriber
+
+1. Launch the Python Publisher:
+
 ```bash
-rosrun example_ros1_package service_server.py
-rosrun example_ros1_package service_client.py
+rosrun example_ros1_package publisher.py
 ```
 
----
+2. Launch the Python Subscriber:
 
-### 🌐 Web Interface (HTML + JavaScript)
-
-#### Requirements:
-- `rosbridge_server`
-
-Install and run:
 ```bash
-sudo apt install ros-noetic-rosbridge-server
-roslaunch rosbridge_server rosbridge_websocket.launch
+rosrun example_ros1_package subscriber.py
 ```
 
-#### Serve the Web Page:
+### Running Tests
+
+To run the tests with Google Test:
+
 ```bash
-cd ~/catkin_ws/src/example_ros1_package/web
-python3 -m http.server 8080
+catkin_make run_tests
 ```
 
-Then open [http://localhost:8080/ros_web_example.html](http://localhost:8080/ros_web_example.html) in your browser.
+## Contributions
 
----
+Feel free to fork and contribute to this package. If you find any issues, please create a GitHub issue or submit a pull request.
 
-## 🧪 Launch All (Optional)
+## License
 
-Add a `launch/demo.launch`:
-
-```xml
-<launch>
-  <node pkg="example_ros1_package" type="talker" name="talker" output="screen"/>
-  <node pkg="example_ros1_package" type="listener" name="listener" output="screen"/>
-  <node pkg="example_ros1_package" type="add_two_ints_server" name="service_server" output="screen"/>
-</launch>
-```
-
-Then run:
-```bash
-roslaunch example_ros1_package demo.launch
-```
-
----
-
-## 📚 Dependencies
-
-- ROS Noetic (or any ROS1 distro)
-- `roscpp`, `std_msgs`, `message_generation`
-- `rosbridge_server` (for web interface)
-
----
-
-## 👨‍💻 Author
-
-Chris Sunny — [@chrissunny94](https://github.com/chrissunny94)
-
----
-
-## 📝 License
-
-This project is licensed under the MIT License.
+This package is released under the MIT License.
