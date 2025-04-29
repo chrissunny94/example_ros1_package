@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ROS Web Interface</title>
+  <script src="https://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+</head>
+<body>
+  <h1>ROS Web Interface</h1>
+
+  <!-- Display Chatter Messages -->
+  <h2>Chatter Topic:</h2>
+  <p id="chatterMsg">Waiting for message...</p>
+
+  <!-- Call AddTwoInts Service -->
+  <h2>Add Two Ints Service</h2>
+  <input type="number" id="a" placeholder="Enter A" />
+  <input type="number" id="b" placeholder="Enter B" />
+  <button onclick="callService()">Add</button>
+  <p id="serviceResult">Result will appear here</p>
+
+  <script>
+    // Connect to rosbridge WebSocket
+    const ros = new ROSLIB.Ros({
+      url: 'ws://localhost:9090'
+    });
+
+    ros.on('connection', function () {
+      console.log('Connected to websocket server.');
+    });
+
+    ros.on('error', function (error) {
+      console.log('Error connecting to websocket server: ', error);
+    });
+
+    ros.on('close', function () {
+      console.log('Connection to websocket server closed.');
+    });
+
+    // Subscriber to /chatter
+    const chatterListener = new ROSLIB.Topic({
+      ros: ros,
+      name: '/chatter',
+      messageType: 'std_msgs/String'
+    });
+
+    chatterListener.subscribe(function (message) {
+      document.getElementById('chatterMsg').innerText = message.data;
+    });
+
+    // Call /add_two_ints service
+    function callService() {
+      const a = parseInt(document.getElementById('a').value);
+      const b = parseInt(document.getElementById('b').value);
+
+      const addService = new ROSLIB.Service({
+        ros: ros,
+        name: '/add_two_ints',
+        serviceType: 'example_ros1_package/AddTwoInts'
+      });
+
+      const request = new ROSLIB.ServiceRequest({
+        a: a,
+        b: b
+      });
+
+      addService.callService(request, function (result) {
+        document.getElementById('serviceResult').innerText = 'Result: ' + result.sum;
+      });
+    }
+  </script>
+</body>
+</html>
