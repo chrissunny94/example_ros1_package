@@ -7,6 +7,14 @@ A beginner-friendly **ROS1** package demonstrating:
 - Implementations in **C++**, **Python**
 - A simple **web interface** using `roslibjs` to interact with ROS
 
+
+```
+rosdep install --from-paths src --ignore-src -r -y
+sudo apt-get update
+sudo apt-get install libgtest-dev cmake
+
+```
+
 ---
 
 ## 📦 Package Structure
